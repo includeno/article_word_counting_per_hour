@@ -5,6 +5,7 @@
 </template>
 
 <script>
+//https://juejin.cn/post/6870011620714627085
 import {getWordCount, getWordCountAllTime} from "@/api/AnalyzeService";
 
 export default {
