@@ -24,7 +24,11 @@ const routes = [
         name: "ArticleEdit",
         component: () => import("@/views/ArticleEdit"),
     },
-
+    {
+        path: "/countdown",
+        name: "CountDown",
+        component: () => import("@/views/CountDown"),
+    },
 
 ]
 

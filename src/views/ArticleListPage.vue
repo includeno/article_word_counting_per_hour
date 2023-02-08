@@ -1,7 +1,8 @@
 <template>
   <div class="home">
     <Header style="margin-bottom:20px;"></Header>
-<!--    <a-button v-on:click="">添加数据</a-button>-->
+    <!--    <a-button v-on:click="">添加数据</a-button>-->
+
     <standard-table
         :columns="columns"
         :dataSource="dataSource"
@@ -41,6 +42,10 @@ const columns = [
     dataIndex: 'createTime'
   },
   {
+    title: '长度',
+    dataIndex: 'length'
+  },
+  {
     title: '版本号',
     dataIndex: 'version'
   },
@@ -53,15 +58,18 @@ const columns = [
 import Header from "@/base/Header";
 import StandardTable from "@/base/StandardTable";
 import {getArticles} from "@/api/ArticleService"
+import {getWordCount} from "@/api/AnalyzeService";
 import dateutil from "@/utils/dateutil";
 
 export default {
-  components:{
+  components: {
     Header,
     StandardTable
   },
   data() {
     return {
+
+      wordcount: 0,
       articles: [],
       selectedRows: [],
       columns: columns,
@@ -75,7 +83,15 @@ export default {
     };
   },
   mounted() {
-    this.getArticles(this.pagination.current,this.pagination.pageSize);
+    this.getArticles(this.pagination.current, this.pagination.pageSize);
+  },
+  created() {
+    this.getArticles(this.pagination.current, this.pagination.pageSize);
+
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
+    this.timer = null;
   },
   methods: {
     onPageChange(page, pageSize) {
@@ -88,12 +104,12 @@ export default {
       this.getArticles(page, pageSize);
     },
     async getArticles(page, pageSize) {
-      let {data} =await getArticles(page,pageSize);
+      let {data} = await getArticles(page, pageSize);
       console.log(data)
       console.log(data.data)
-      this.dataSource=data.data.records;
+      this.dataSource = data.data.records;
 
-      let final_data=[]
+      let final_data = []
       this.dataSource.forEach(r => {
 
         final_data.push({
@@ -101,9 +117,10 @@ export default {
           content: r["content"],
           title: r["title"],
           version: r["version"],
+          length: r["length"],
           createTime: dateutil.getDateStringFromTimestamp(r["createTime"]),
         });
-        this.dataSource=final_data;
+        this.dataSource = final_data;
       });
     },
     onClear() {
@@ -119,8 +136,5 @@ export default {
       //this.$message.info('选中行改变了')
     },
   },
-  created() {
-    this.getArticles(this.pagination.current, this.pagination.pageSize);
-  }
 };
 </script>

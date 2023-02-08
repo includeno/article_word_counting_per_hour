@@ -15,16 +15,23 @@
           <div class="home">
             <router-link :to="{name:'ArticleAdd'}">新增</router-link>
           </div>
+          <div class="home">
+            <router-link :to="{name:'CountDown'}">CountDown</router-link>
+          </div>
         </ul>
+        <div>
+          <CountDownTimer></CountDownTimer>
+        </div>
 
       </div>
     </div>
   </div>
 </template>
 <script>
-
+import CountDownTimer from "@/base/CountDownTimer";
 export default {
   components: {
+    CountDownTimer
   },
   computed: {
   },
